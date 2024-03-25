@@ -22,8 +22,17 @@ def pregunta_01():
     40
 
     """
-    return
-
+    # retorno la cantidad de registro con la función len (me mide la cantidad de filas)
+    # respuesta_op1= (len(tbl0))
+    # return respuesta_op1
+    
+    # atributos: Columnas
+    # Registros: filas
+    # shape devuelve una tupla con el dimensionamiento de la tabla 0= fila, 1= columnas
+    # en este caso me devuelve la cantidad de filas de la tupla
+    
+    respuesta_op2=tbl0.shape[0]
+    return respuesta_op2  
 
 def pregunta_02():
     """
@@ -33,8 +42,14 @@ def pregunta_02():
     4
 
     """
-    return
-
+    # .columns devuelve una lista con los nombres de las columnas, cuando utilizo len
+    # me permite sacar la longuitud de la lista, en este caso me mide la longitud de las columnas
+    respuesta_op2= len(tbl0.columns)
+    return respuesta_op2
+    
+    # otra forma de hacerlos es a través de la función shape, que me permite trael la cantidad de filas
+    # respuesta_op1=tbl0.shape[1]
+    # return respuesta_op1
 
 def pregunta_03():
     """
@@ -50,7 +65,13 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
-    return
+    # En este caso solo necesito la columna _c1 de la tabla, por lo que creo una variable
+    # En este caso requiere un data serie, en donde selecciono la columna _c1, realizo un conteo de dicha variable y la organizo como un indice.  
+    # en este caso creo un data serie (información de una sola columna)
+    columna_letras = tbl0["_c1"]
+    conteo_letras = columna_letras.value_counts().sort_index()
+    
+    return conteo_letras
 
 
 def pregunta_04():
@@ -65,7 +86,11 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return
+    # en este caso también creo un data serie, 
+    # agrupando la información con base en la columna _c1 y
+    # calculando la media de _c2
+    # con el fin de ahorrar espacio de máquina puedo definir en el mismo retorno la respuesta 
+    return tbl0.groupby("_c1")["_c2"].mean()
 
 
 def pregunta_05():
@@ -82,7 +107,11 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return
+    # el procedimiento es el mismo que el anterior, agrupo con base en _c1
+    # pero esta vez calculo para el campo _c2 el valor máximo.
+    # para ahorrar espacio de máquina dejo en el retorno el resultado
+    
+    return tbl0.groupby("_c1")["_c2"].max()
 
 
 def pregunta_06():
@@ -94,7 +123,37 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    return
+# forma 1: 
+# a. Creo una nueva variable, seleccionando solo el campo _c4 de la tabla 0, 
+# y uso la función apply para que los string pasen de minúscula a mayúscula.
+# b. creo una 
+#   
+# tbl1['_c4'] = tbl1['_c4'].apply(str.upper)
+# Respuesta_06 = list(tbl1.sort_values(by='_c4', ascending=True)['_c4'].unique())
+# Respuesta_06
+
+# Forma 2
+# Var = list(sorted(set(tbl1['_c4'].str.upper())))
+# Var
+
+# Respuesta_06 = list(tbl1.sort_values(by='_c4', ascending=True)['_c4'].unique())
+# Respuesta_06
+
+
+# for i in Respuesta_06:
+#     Respuesta_07.append(i)
+#     # print(i)
+
+    # respuesta_06=[]
+    # tbl1["_c4"]=tbl1["_c4"].str.upper()
+    # respuesta_06= list(tbl1.sort_values(by="_c4", ascending=True)["_c4"].unique())
+
+    respuesta_parcial_may= tbl1['_c4'].apply(str.upper)
+    
+    Respuesta= list(respuesta_parcial_may.sort_values(ascending=True).unique())
+    Respuesta
+    
+    return Respuesta
 
 
 def pregunta_07():
@@ -110,7 +169,11 @@ def pregunta_07():
     E    67
     Name: _c2, dtype: int64
     """
-    return
+    #
+    # es el mismo ejercicio que el anterior, creo un data set agrupando por _c1
+    # y calculando la suma de variable _c2.
+    
+    return tbl0.groupby("_c1")["_c2"].sum()
 
 
 def pregunta_08():
@@ -128,7 +191,14 @@ def pregunta_08():
     39   39   E    5  1998-01-26    44
 
     """
-    return
+    
+    # debido a que vamos a crear una nueva columna, se sugiere crear una copia de la tabla
+    # se crea la copia de la tabla
+    tbl0_c=tbl0.copy()
+    
+    # para ahorrar espacio de máquina, retorno con la creación de una nueva columna, con la función assign 
+    # creo una función que sería la suma de las columnas _c0 y _c2
+    return tbl0_c.assign(suma=tbl0_c["_c0"]+tbl0_c["_c2"])
 
 
 def pregunta_09():
@@ -146,7 +216,16 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return
+    # de igual manera creo una copia de la tabla original
+    tbl0_c=tbl0.copy()
+    
+    # para ahorrar espacio máquina creo en el retorno el resultad
+    # creo una nueva columna con la función assign llamada "year"
+    # que sería igual a la columna _c3,
+    # con la función str.split separo la variable string por -
+    # de igual manera traigo el str ubicado en la posición 0, que es el año
+    
+    return tbl0_c.assign(year=tbl0_c["_c3"].str.split("-").str[0])
 
 
 def pregunta_10():
@@ -163,7 +242,21 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return
+    # realizo un agrupamiento con pase en la columna _c1 (valores únicos) y ordenados
+    # de la columna _c2 utilizo la función apply para realizar una función específica. 
+    #
+    # df.groupby('_c1')['_c2']: Esta parte del código agrupa los valores de _c2 según los valores únicos de _c1.
+    # .apply(lambda x: ':'.join(map(str, sorted(x)))): Se aplica una función lambda a cada grupo.
+    # sorted(x): Ordena los valores del grupo en orden ascendente.
+    # map(str, ...): Convierte cada valor del grupo en una cadena de texto.
+    # ':'.join(...): Une los valores del grupo en una sola cadena separada por :.
+    # .reset_index(): Restablece el índice del DataFrame resultante, garantizando que _c1 y la nueva columna tengan un índice limpio y continúen desde 0.
+    
+    resultado = tbl0.groupby('_c1')['_c2'].apply(lambda x: ':'.join(map(str, sorted(x)))).reset_index()
+    
+    resultado.set_index("_c1", inplace=True)
+    
+    return resultado
 
 
 def pregunta_11():
@@ -182,7 +275,8 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+    resultado = tbl1.groupby('_c0')['_c4'].apply(lambda x: ','.join(sorted([e.lower() for e in x]))).reset_index()
+    return resultado
 
 
 def pregunta_12():
@@ -200,7 +294,16 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+    # creo una variable que contenga una copia de la tabla 2, debido a que voy a modificar el orden
+    respuesta_11=tbl2.copy()
+    # creo una nueva variable, a partir de la copia de la tabla 2 para organizar con base en la columna _c5a
+    respuesta_intermedia=respuesta_11.sort_values(["_c5a","_c5b","_c0"])
+    # creo una nueva variable combinando la clumna _c5a y _c5b
+    nueva_columna=respuesta_intermedia.assign(_c5=respuesta_intermedia["_c5a"]+":"+respuesta_intermedia["_c5b"].astype(str))
+    # creo una nueva variable con la respuesta
+    respuesta_final=nueva_columna.groupby("_c0")["_c5"].agg(",".join).reset_index()
+    
+    return respuesta_final
 
 
 def pregunta_13():
@@ -217,4 +320,8 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return
+    # crear una nueva tabla, a partir de la tabla 0 y tabla 2
+    # columna _co es la clave, hay que computar  tbl2 por cada valor de tbl0
+    Df_fusion= pd.merge(tbl2,tbl0,on="_c0")
+    Respuesta_13= Df_fusion.groupby("_c1")["_c5b"].sum()
+    return Respuesta_13
